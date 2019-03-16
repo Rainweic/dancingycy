@@ -65,4 +65,3 @@ Python 3.6.5 <br>
 Pytorch 0.4.1  <br>
 OpenCV 3.4.4  <br>
 
-
