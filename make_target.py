@@ -74,9 +74,21 @@ for idx in tqdm(range(len(os.listdir(str(img_dir))))):
     shape_dst = np.min(img.shape[:2])
     oh = (img.shape[0] - shape_dst) // 2
     ow = (img.shape[1] - shape_dst) // 2
+  
+    shape_dst2 = np.max(img.shape[:2])
+    img2=np.zeros((512,512,3), dtype=np.uint8)
+    if img.shape[0]>img.shape[1]:
+        img = cv2.resize(img, (img.shape[1]*512//img.shape[0],512))
+        save=(512-img.shape[1])//2
+        img2[:img.shape[0],save:save+img.shape[1]]=img
+    else:
+        img = cv2.resize(img, (512,img.shape[0]*512//img.shape[1]))
+        save=(512-img.shape[0])//2
+        img2[save:save+img.shape[0],:img.shape[1]]=img
+    
+    img=np.copy(img2)
 
-    img = img[oh:oh + shape_dst, ow:ow + shape_dst]
-    img = cv2.resize(img, (512, 512))
+    #img = img[oh:oh + shape_dst, ow:ow + shape_dst]
     multiplier = get_multiplier(img)
     with torch.no_grad():
         paf, heatmap = get_outputs(multiplier, img, model, 'rtpose')
@@ -88,11 +100,20 @@ for idx in tqdm(range(len(os.listdir(str(img_dir))))):
     label, cord = get_pose(param, heatmap, paf)
     index = 13
     crop_size = 25
+    
     try:
         head_cord = cord[index]
     except:
         head_cord = pose_cords[-1] # if there is not head point in picture, use last frame
-
+    print(head_cord)
+    if head_cord[1]<crop_size:
+        head_cord[1]=crop_size
+    if head_cord[1]+crop_size>=512:
+        head_cord[1]=512-crop_size-1
+    if head_cord[0]<crop_size:
+        head_cord[0]=crop_size
+    if head_cord[0]+crop_size>=512:
+        head_cord[0]=512-crop_size-1
     pose_cords.append(head_cord)
     head = img[int(head_cord[1] - crop_size): int(head_cord[1] + crop_size),
            int(head_cord[0] - crop_size): int(head_cord[0] + crop_size), :]
