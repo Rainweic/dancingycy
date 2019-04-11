@@ -1,0 +1,1 @@
+python get_aug.py --outputSize '692,476' --data_argument_rate 1 --load_para_translate "-50 , 50" --load_para_brightness '1,1' --load_para_contrast '1,1' --load_para_saturation '1,1' --load_para_hue '0,0'
