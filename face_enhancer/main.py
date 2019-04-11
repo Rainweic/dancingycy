@@ -48,6 +48,7 @@ def main(is_debug):
     batch_num = 10
     batch_size = 10
 
+    print(dataset_dir)
     image_folder = dataset.ImageFolderDataset(dataset_dir, cache=os.path.join(dataset_dir, 'local.db'))
     face_dataset = dataset.FaceCropDataset(image_folder, pose_name, image_transforms, crop_size=48)  # 48 for 512-frame, 96 for HD frame
     data_loader = DataLoader(face_dataset, batch_size=batch_size,

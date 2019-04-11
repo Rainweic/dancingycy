@@ -30,7 +30,7 @@ class Trainer(object):
         self.sampler = dataloader
         self.enumerator = None
 
-        from face_enhancer.utils.perceptual_loss import VGG_perceptual_loss
+        from utils.perceptual_loss import VGG_perceptual_loss
         self.gen_loss = nn.MSELoss()
         self.recon_loss = VGG_perceptual_loss(pretrained=True, device=self.device)
         self.dis_loss = nn.MSELoss()  # LSGAN

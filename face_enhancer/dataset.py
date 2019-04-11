@@ -12,7 +12,7 @@ class ImageFolderDataset(Dataset):
             with open(cache, 'rb') as f:
                 self.root, self.images, self.size = pickle.load(f)
         else:
-            self.images = sorted(os.listdir(os.path.join(root, 'test_real')))
+            self.images = sorted(os.listdir(os.path.join(root, 'test_real')))[1:]
             self.root = root
             tmp = imread(os.path.join(self.root, 'test_real', self.images[0]))
             self.size = tmp.shape[:-1]

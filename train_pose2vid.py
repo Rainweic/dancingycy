@@ -53,7 +53,7 @@ def main():
 
             # whether to collect output images
             save_fake = total_steps % opt.display_freq == display_delta
-
+            #print(data)
             ############## Forward Pass ######################
             losses, generated = model(Variable(data['label']), Variable(data['inst']),
                                       Variable(data['image']), Variable(data['feat']), infer=save_fake)

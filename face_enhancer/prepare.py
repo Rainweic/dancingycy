@@ -28,12 +28,15 @@ for img_idx in tqdm(range(len(os.listdir(train_dir)))):
 print('Prepare test_sync....')
 import os
 import torch
+#os.environ['CUDA_VISIBLE_DEVICES'] = "0"
+torch.cuda.set_device(0)
 from collections import OrderedDict
 from pathlib import Path
 from tqdm import tqdm
 import sys
 pix2pixhd_dir = Path('../src/pix2pixHD/')
 sys.path.append(str(pix2pixhd_dir))
+sys.path.append('../')
 
 from data.data_loader import CreateDataLoader
 from models.models import create_model
@@ -61,6 +64,8 @@ model = create_model(opt)
 
 for data in tqdm(dataset):
     minibatch = 1
+    #print(data['label'])
+    #print(data['inst'])
     generated = model.inference(data['label'], data['inst'])
 
     visuals = OrderedDict([('synthesized_image', util.tensor2im(generated.data[0]))])
